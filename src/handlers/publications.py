@@ -5,6 +5,7 @@ import json
 import os
 import time
 
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from scholarly import scholarly
 import azure.functions as func
 
@@ -32,16 +33,9 @@ def inAuthor(author, attribute):
     except:
         return "Unavailable" 
 
-    
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
-
-    #local_path = "./data"
-
-    # make directory if it doesn't exist
-    #if not os.path.exists(local_path):
-        #os.makedirs(local_path)
 
     # loop through the author list
     for each_author in author_list:
@@ -125,22 +119,31 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             
                 # create suitable author filename
                 filename = a_name.replace(" ", "_").lower()
-                #authorfile = open("data/" + filename + "_" + a_authorID + ".json", "a") 
-                authorfile = open(filename + "_" + a_authorID + ".json", "a") 
+                complete_fn = filename + "_" + a_authorID + ".json" 
+                authorfile = open(complete_fn, "a") 
 
                 try:
                     authorfile.write(json.dumps(author_dict))
+                    authorfile.close()
+
+                    # Create a blob client using the local file name as the name for the blob
+                    blob = BlobClient.from_connection_string(conn_str=os.getenv('CONNECTION_STRING'), container_name=os.getenv('CONTAINER_NAME'), blob_name=complete_fn)
+                
+            
+                    print("\nUploading to Azure Storage as blob:\n\t" + complete_fn)
+
+                    # Upload the created file
+                    with open(complete_fn, "rb") as data:
+                        blob.upload_blob(data)
                 
                 except: 
                     e = sys.exc_info()[0]
                     logging.error(f' error writing to file{e}')
 
-                finally:
-                    authorfile.close()
+               
 
             except:
-                 e = sys.exc_info()[0]
-                 logging.error(f' No publications{e}')
+                 logging.error(f' No publications for author')
 
        
     time.sleep(1)
