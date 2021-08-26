@@ -4,6 +4,8 @@ import sys
 import json
 import os
 import time
+from dotenv import load_dotenv
+load_dotenv()
 
 from azure.storage.blob import BlobClient
 from scholarly import scholarly
