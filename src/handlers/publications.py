@@ -5,7 +5,7 @@ import json
 import os
 import time
 
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from azure.storage.blob import BlobClient
 from scholarly import scholarly
 import azure.functions as func
 
@@ -37,7 +37,7 @@ def inAuthor(author, attribute):
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    # loop through the author list
+    # loop through the author listser
     for each_author in author_list:
 
         authorID = each_author
