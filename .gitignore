@@ -90,6 +90,7 @@ out
 # Azure Functions artifacts
 bin
 obj
+credentials.json
 appsettings.json
 local.settings.json
 .python_packages/

@@ -22,13 +22,14 @@ provider:
   region: UK South
   runtime: python3.8 # python3.7 or python3.8 also available
   os: linux  # linux is the only operating system available for python
-  # prefix: "sample"  # prefix of generated resource name
+  prefix: "scholarly"  # prefix of generated resource name
   subscriptionId: e7cbfebb-f482-46c4-a90b-126855b03325
-  # stage: dev
+  stage: prod
   # type: premium  # premium azure functions
 
   environment: # these will be created as application settings
-    VARIABLE_FOO: 'foo'
+    CONNECTION_STRING : ${file(credentials.json):CONNECTION_STRING}
+    CONTAINER_NAME : ${file(credentials.json):CONTAINER_NAME}
 
   # you can define apim configuration here
   # apim:
@@ -82,29 +83,24 @@ package:
   #   - include-me-dir/**
 
 functions:
-  hello:
-    handler: src/handlers/hello.main
-    events:
-      - http: true
-        methods:
-          - GET
-        authLevel: anonymous
+  
 
-  goodbye:
-    handler: src/handlers/goodbye.main
-    events:
-      - http: true
-        methods:
-          - GET
-        authLevel: anonymous
-
-  publications:
+  #publications:
+    #handler: src/handlers/publications.main
+    #events:
+      #- http: true
+       # methods:
+        #  - GET
+        #authLevel: anonymous
+           
+  timer:
     handler: src/handlers/publications.main
     events:
-      - http: true
-        methods:
-          - GET
-        authLevel: anonymous
+      - timer: true
+        # 3am
+        schedule: '0 3 * * * *'
+        
+
   # The following are a few examples of other events you can configure:
   # storageBlob:
   #   handler: src/handlers/storageBlob
@@ -127,29 +123,4 @@ functions:
   #     - timer:
   #       x-azure-settings:
   #         schedule: '*/10 * * * * *'
-  # eventhub:
-  #   handler: src/handlers/eventHub
-  #   events:
-  #     - eventHub:
-  #       x-azure-settings:
-  #         name: eventHubMessages # Specifies which name it's available on `context`
-  #         eventHubName: sample-hub # Specifies the Name of the Event Hub
-  #         consumerGroup: $Default # Specifies the consumerGroup to listen with
-  #         connection: EVENT_HUBS_CONNECTION # App Setting/environment variable which contains Event Hubs Namespace Connection String
-  # serviceBusQueue:
-  #   handler: src/handlers/serviceBusQueue
-  #   events:
-  #     - serviceBus:
-  #       x-azure-settings:
-  #         name: message # Specifies which name is available on `context`
-  #         queueName: sample-queue # Name of the service bus queue to consume
-  #         connection: SERVICE_BUS_CONNECTION # App Setting/environment variable variable which contains Service Bus Namespace Connection String
-  # serviceBusTopic:
-  #   handler: src/handlers/serviceBusTopic
-  #   events:
-  #     - serviceBus:
-  #       x-azure-settings:
-  #         name: message # Specifies which name it's available on `context`
-  #         topicName: sample-topic # Name of the service bus topic to consume
-  #         subscriptionName: sample-subscription # Name of the topic subscription to retrieve from
-  #         connection: SERVICE_BUS_CONNECTION # App Setting/environment variable variable which contains Service Bus Namespace Connection String
+  

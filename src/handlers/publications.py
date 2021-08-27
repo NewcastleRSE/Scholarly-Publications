@@ -36,20 +36,16 @@ def inAuthor(author, attribute):
         return "Unavailable" 
 
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
+# function run by serverless timer every 24 hours
+def main(context, myTimer):
+
+#def main(req: func.HttpRequest) -> func.HttpResponse:
+    #logging.info('Python HTTP trigger function processed a request.')
 
     # loop through the author listser
     for each_author in author_list:
 
         authorID = each_author
-        if not authorID:
-            try:
-                req_body = req.get_json()
-            except ValueError:
-                pass
-            else:
-                authorID = req_body.get('authorID')
 
         if authorID:
             author = scholarly.search_author_id(authorID)
@@ -128,21 +124,22 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     authorfile.write(json.dumps(author_dict))
                     authorfile.close()
 
+                    output = json.dumps(author_dict)
+
                     # Create a blob client using the local file name as the name for the blob
                     blob = BlobClient.from_connection_string(conn_str=os.getenv('CONNECTION_STRING'), container_name=os.getenv('CONTAINER_NAME'), blob_name=complete_fn)
                 
-            
                     print("\nUploading to Azure Storage as blob:\n\t" + complete_fn)
 
                     # Upload the created file
-                    with open(complete_fn, "rb") as data:
-                        blob.upload_blob(data)
+                    #with open(complete_fn, "rb") as data:
+                        #blob.upload_blob(data)pip
+
+                    blob.upload_blob(output)    
                 
                 except: 
                     e = sys.exc_info()[0]
-                    logging.error(f' error writing to file{e}')
-
-               
+                    logging.error(f' error writing to file{e}')     
 
             except:
                  logging.error(f' No publications for author')
@@ -150,9 +147,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
        
     time.sleep(1)
 
-    return func.HttpResponse( 
-            "All authors complete",
-            status_code=200
-    )        
+    #return func.HttpResponse( 
+           # "All authors complete",
+           # status_code=200
+    #)
+
+    return json.dumps({
+        "message" : "All authors complete"
+    })        
             
 
