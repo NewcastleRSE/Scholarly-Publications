@@ -1,15 +1,3 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
 
 service: serverless
 
@@ -31,35 +19,7 @@ provider:
     CONNECTION_STRING : ${file(credentials.json):CONNECTION_STRING}
     CONTAINER_NAME : ${file(credentials.json):CONTAINER_NAME}
 
-  # you can define apim configuration here
-  # apim:
-  #   apis:
-  #     - name: v1
-  #       subscriptionRequired: false # if true must provide an api key
-  #       displayName: v1
-  #       description: V1 sample app APIs
-  #       protocols:
-  #         - https
-  #       path: v1
-  #       tags:
-  #         - tag1
-  #         - tag2
-  #       authorization: none
-  #   cors:
-  #     allowCredentials: false
-  #     allowedOrigins:
-  #       - "*"
-  #     allowedMethods:
-  #       - GET
-  #       - POST
-  #       - PUT
-  #       - DELETE
-  #       - PATCH
-  #     allowedHeaders:
-  #       - "*"
-  #     exposeHeaders:
-  #       - "*"
-
+  
 plugins:
   - serverless-azure-functions
   - serverless-python-requirements
@@ -83,44 +43,15 @@ package:
   #   - include-me-dir/**
 
 functions:
-  
-
-  #publications:
-    #handler: src/handlers/publications.main
-    #events:
-      #- http: true
-       # methods:
-        #  - GET
-        #authLevel: anonymous
-           
+          
   timer:
     handler: src/handlers/publications.main
     events:
       - timer: true
-        # 3am
-        schedule: '0 3 * * * *'
+        # NCRONTAB format
+        schedule: '0 0 3 * * *'
+        # for testing (every 2 mins)
+        #schedule: '0 */2 * * * *'
         
 
-  # The following are a few examples of other events you can configure:
-  # storageBlob:
-  #   handler: src/handlers/storageBlob
-  #   events:
-  #     - blob:
-  #       x-azure-settings:
-  #         name: blob # Specifies which name is available on `context`
-  #         path: blob-sample/{blobName}
-  #         connection: AzureWebJobsStorage # App Setting/environment variable which contains Storage Account Connection String
-  # storageQueue:
-  #   handler: src/handlers/storageQueue
-  #   events:
-  #     - queue: queue-sample
-  #       x-azure-settings:
-  #         name: message # Specifies which name is available on `context`
-  #         connection: AzureWebJobsStorage
-  # timer:
-  #   handler: src/handlers/timer
-  #   events:
-  #     - timer:
-  #       x-azure-settings:
-  #         schedule: '*/10 * * * * *'
   

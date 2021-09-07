@@ -39,9 +39,6 @@ def inAuthor(author, attribute):
 # function run by serverless timer every 24 hours
 def main(context, myTimer):
 
-#def main(req: func.HttpRequest) -> func.HttpResponse:
-    #logging.info('Python HTTP trigger function processed a request.')
-
     # loop through the author listser
     for each_author in author_list:
 
@@ -118,11 +115,8 @@ def main(context, myTimer):
                 # create suitable author filename
                 filename = a_name.replace(" ", "_").lower()
                 complete_fn = filename + "_" + a_authorID + ".json" 
-                authorfile = open(complete_fn, "a") 
-
+            
                 try:
-                    authorfile.write(json.dumps(author_dict))
-                    authorfile.close()
 
                     output = json.dumps(author_dict)
 
@@ -131,10 +125,6 @@ def main(context, myTimer):
                 
                     print("\nUploading to Azure Storage as blob:\n\t" + complete_fn)
 
-                    # Upload the created file
-                    #with open(complete_fn, "rb") as data:
-                        #blob.upload_blob(data)pip
-
                     blob.upload_blob(output)    
                 
                 except: 
@@ -142,18 +132,11 @@ def main(context, myTimer):
                     logging.error(f' error writing to file{e}')     
 
             except:
-                 logging.error(f' No publications for author')
+                logging.error(f'publications error')
 
        
     time.sleep(1)
 
-    #return func.HttpResponse( 
-           # "All authors complete",
-           # status_code=200
-    #)
-
-    return json.dumps({
-        "message" : "All authors complete"
-    })        
+   
             
 
