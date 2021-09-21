@@ -4,21 +4,20 @@ A Python script for fetching lists of publications by author using the [Scholarl
 
 ## Publications
 
-The function is called via `/api/publications?authorID=XXXXXXXXX` providing a valid Google Scholar author ID as a required query parameter.
+The script will upload json files contaning publications data for given authors to a given storage account on Azure. The storage account should have a container with access level: anonymous blob read access. The script is timed to run at 3am BST.
 
-```bash
-/api/publications?authorID=z6jaMRcAAAAJ
-``` 
+## Set up
 
-## Offline Testing
+The script requires a credentials.json file at project root to hold environment variables. The AUTHOR_IDS string should contain a space separated list of valid Google Scholar author IDs. The container name can be changed to suit the azure set up of the user.
 
-Ensure all dependencies are installed with using whatever Python setup you have such as `venv` or global installation.
-
-```bash
-serverless offline
+```
+ "CONNECTION_STRING" : "DefaultEndpointsProtocol=https;AccountName=xxxxxx;AccountKey=xxxxxx;EndpointSuffix=core.windows.net",
+ "CONTAINER_NAME" :  "author-publications",
+ "FUNCTIONS_WORKER_RUNTIME" : "python",
+ "AUTHOR_IDS" : "xxxxxx xxxxxx xxxxxx"
 ```
 
-Watch the logs for the URL for each function to be printed.
+Watch the logs on Azure for queries to Google Scholar
 
 ## Deployment
 
