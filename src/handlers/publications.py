@@ -11,8 +11,9 @@ from azure.storage.blob import BlobClient
 from scholarly import scholarly
 import azure.functions as func
 
-# WqH63QAAAAJ Ellen Moss dodgy?
-author_list = ['UeMGAaAAAAAJ','dH4219oAAAAJ','2Kcd0zoAAAAJ', '4zjd8H8AAAAJ','akdJAsEAAAAJ','GjSCPJ0AAAAJ', '_NdzLicAAAAJ', 'ujbju80AAAAJ', 'z6jaMRcAAAAJ', 'NVBSg9gAAAAJ', 'oAjiq3QAAAAJ', '5ydGTN0AAAAJ'] 
+# get author list from environment variable
+raw_author_list = os.getenv('AUTHOR_IDS')
+author_list = raw_author_list.split()
 
 def isAvailable(publication, pub_attribute):
     try:
@@ -39,25 +40,26 @@ def inAuthor(author, attribute):
 # function run by serverless timer every 24 hours
 def main(context, myTimer):
 
-    # loop through the author listser
+    # loop through the author list
     for each_author in author_list:
 
         authorID = each_author
-
+        logging.info(authorID)
+        
         if authorID:
             author = scholarly.search_author_id(authorID)
             author = scholarly.fill(author, sections=['publications'])
 
             # Uncomment below to get full publication data - hits scholarly harder and can cause IP to be blocked
-            #publications = []
+            publications = []
 
-            #for publication in author['publications']:
-                #try:
-                    #publications.append(scholarly.fill(publication))
-                    #logging.info('Added publication to list')
-                #except: # catch all exceptions
-                    #e = sys.exc_info()[0]
-                    #logging.error(f' error doing query{e}')
+            for publication in author['publications']:
+                try:
+                    publications.append(scholarly.fill(publication))
+                    logging.info('Added publication to list')
+                except: # catch all exceptions
+                    e = sys.exc_info()[0]
+                    logging.error(f' error doing query{e}')
                     
         
             a_name = inAuthor(author, 'name')
@@ -122,10 +124,9 @@ def main(context, myTimer):
 
                     # Create a blob client using the local file name as the name for the blob
                     blob = BlobClient.from_connection_string(conn_str=os.getenv('CONNECTION_STRING'), container_name=os.getenv('CONTAINER_NAME'), blob_name=complete_fn)
-                
+                  
                     print("\nUploading to Azure Storage as blob:\n\t" + complete_fn)
-
-                    blob.upload_blob(output)    
+                    blob.upload_blob(output, overwrite=True)    
                 
                 except: 
                     e = sys.exc_info()[0]
@@ -134,7 +135,7 @@ def main(context, myTimer):
             except:
                 logging.error(f'publications error')
 
-       
+        
     time.sleep(1)
 
    

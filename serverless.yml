@@ -18,6 +18,7 @@ provider:
   environment: # these will be created as application settings
     CONNECTION_STRING : ${file(credentials.json):CONNECTION_STRING}
     CONTAINER_NAME : ${file(credentials.json):CONTAINER_NAME}
+    AUTHOR_IDS : ${file(credentials.json):AUTHOR_IDS}
 
   
 plugins:
@@ -52,6 +53,7 @@ functions:
         schedule: '0 0 3 * * *'
         # for testing (every 2 mins)
         #schedule: '0 */2 * * * *'
+       
         
 
   
