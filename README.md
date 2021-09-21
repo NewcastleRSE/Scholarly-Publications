@@ -8,7 +8,7 @@ The script will upload json files contaning publications data for given authors 
 
 ## Set up
 
-The script requires a credentials.json file at project root to hold environment variables. The AUTHOR_IDS string should contain a space separated list of valid Google Scholar author IDs. The container name can be changed to suit the azure set up of the user.
+The script requires a credentials.json file at project root to hold environment variables. The AUTHOR_IDS string should contain a space separated list of valid Google Scholar author IDs. The container name can be changed to suit the Azure set up of the user.
 
 ```
  "CONNECTION_STRING" : "DefaultEndpointsProtocol=https;AccountName=xxxxxx;AccountKey=xxxxxx;EndpointSuffix=core.windows.net",
@@ -17,7 +17,7 @@ The script requires a credentials.json file at project root to hold environment 
  "AUTHOR_IDS" : "xxxxxx xxxxxx xxxxxx"
 ```
 
-Watch the logs on Azure for queries to Google Scholar
+Read the Azure function logs for queries to Google Scholar
 
 ## Deployment
 
