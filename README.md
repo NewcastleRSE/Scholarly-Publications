@@ -4,7 +4,7 @@ A Python script for fetching lists of publications by author using the [Scholarl
 
 ## Publications
 
-The script will upload json files contaning publications data for given authors to a given storage account on Azure. The storage account should have a container with access level: anonymous blob read access. The script is timed to run at 3am BST.
+The script will upload json files containing publications data for given authors to a given storage account on Azure. The script is controlled by a serverless timer function in the serverless.yml file, which is timed to run at 3am. This can be changed by altering the NCRONTAB format. The Azure storage account used should have a container with access level: anonymous blob read access. 
 
 ## Set up
 
