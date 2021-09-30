@@ -1,6 +1,6 @@
 # Scholarly Publications
 
-A Python script for fetching lists of publications by author using the [Scholarly](https://scholarly.readthedocs.io/en/stable/index.html) library. Deplyment to Azure is handled via the Serverless framework, refer to [Serverless Azure documentation](https://serverless.com/framework/docs/providers/azure/guide/intro/) for more information.
+A Python script for fetching lists of publications by author using the [Scholarly](https://scholarly.readthedocs.io/en/stable/index.html) library.
 
 ## Publications
 
@@ -41,6 +41,4 @@ fetch('https://<container-name>.blob.core.windows.net/author-publications/<name>
 
 ## Deployment
 
-```bash
-serverless deploy
-```
+Deplyment to Azure is handled via the Serverless framework, refer to [Serverless Azure documentation](https://serverless.com/framework/docs/providers/azure/guide/intro/) for more information.
