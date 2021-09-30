@@ -19,12 +19,24 @@ The script requires a credentials.json file at project root to hold environment 
 
 Read the Azure function logs for queries to Google Scholar
 
-## Files
+## Outputs
 
-Once files are being generated in the desired container, individual files can be accessed by using the URL property of the file and pasting it into a browser. The file will download onto your local file system. Example link:
+The function generates a JSON file per author and uploads them to the desired container. Individual files can be accessed by using the URL property of the file and pasting it into a browser. The file will download onto your local file system. Example link:
 
 ```
-https://example-container-name.blob.core.windows.net/author-publications/xxxxxx.json
+https://<container-name>e.blob.core.windows.net/author-publications/<name>_<authorID>.json
+```
+
+Alternatively the files can be accessed via a HTTP GET request to load the data into code for use in your own application. A simple JavaScript based example is as foolows:
+
+```javascript
+fetch('https://<container-name>.blob.core.windows.net/author-publications/<name>_<authorID>.json', {
+    method: 'get'
+}).then(function(response) {
+    // Do something with the data
+}).catch(function(err) {
+    // Error :(
+});
 ```
 
 ## Deployment
