@@ -24,7 +24,7 @@ Read the Azure function logs for queries to Google Scholar
 The function generates a JSON file per author and uploads them to the desired container. Individual files can be accessed by using the URL property of the file and pasting it into a browser. The file will download onto your local file system. Example link:
 
 ```
-https://<container-name>e.blob.core.windows.net/author-publications/<name>_<authorID>.json
+https://<container-name>.blob.core.windows.net/author-publications/<name>_<authorID>.json
 ```
 
 Alternatively the files can be accessed via a HTTP GET request to load the data into code for use in your own application. A simple JavaScript based example is as foolows:
